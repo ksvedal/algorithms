@@ -1,4 +1,4 @@
-val prices = arrayOf( -1, 3, -9, 2, 2, -1, 2, -1, -5 )
+val prices = arrayOf( -1, 3, -9, 2, 2, -1, -5 )
 
 fun main() {
     var rounds = 0.0
@@ -25,7 +25,7 @@ fun calculateMaxProfit() {
     var highPrice = 0
     var profit = 0
 
-    prices.forEachIndexed() { day, priceChange ->
+    prices.forEachIndexed { day, priceChange ->
 
         // Change current price of stock.
         currentPrice += priceChange
@@ -38,7 +38,7 @@ fun calculateMaxProfit() {
 
         // Sets temporary low day if current price is less than the lowest recorded price.
         if (currentPrice < lowPrice) {
-            lowPrice = currentPrice;
+            lowPrice = currentPrice
             temporaryLowDay = day + 1
         } else {
 
