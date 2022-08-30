@@ -1,8 +1,16 @@
-
 val prices = arrayOf( -1, 3, -9, 2, 2, -1, 2, -1, -5 )
 
 fun main() {
-    calculateMaxProfit()
+    var rounds = 0.0
+    val time = System.currentTimeMillis()
+
+    do {
+        calculateMaxProfit()
+        rounds++
+    } while (System.currentTimeMillis() - time <= 1000)
+
+    val msPerRound = 1000/rounds
+    println("Milliseconds used per round: $msPerRound")
 }
 
 fun calculateMaxProfit() {
