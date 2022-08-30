@@ -1,5 +1,5 @@
 
-val prices = arrayOf( 10, 3, -9, 2, 2, -1, 2, -1, -5 )
+val prices = arrayOf( -1, 3, -9, 2, 2, -1, 2, -1, -5 )
 
 fun main() {
     calculateMaxProfit()
@@ -8,6 +8,7 @@ fun main() {
 fun calculateMaxProfit() {
 
     var temporaryLowDay = 1
+    var temporaryHighDay = 1
     var lowDay = 1
     var highDay = 1
 
@@ -33,17 +34,17 @@ fun calculateMaxProfit() {
             temporaryLowDay = day + 1
         } else {
 
-            if ((highPrice < highPrice - lowPrice) && (day >= temporaryLowDay)) {
-
-                // Sets high price if it's less than current price
+            // Sets temporary high day if current price is more than the highest recorded price.
+            if ((currentPrice - lowPrice) > profit) {
                 highPrice = currentPrice
+                temporaryHighDay = day + 1
+            }
 
-                // Sets profit, low day and high day if profit is higher than currently registered
-                if (profit < (highPrice - lowPrice)) {
-                    profit = highPrice - lowPrice
-                    highDay = day + 1
-                    lowDay = temporaryLowDay
-                }
+            // Sets profit, low day and high day if profit is higher than currently registered
+            if ((profit < (highPrice - lowPrice)) && (temporaryHighDay > temporaryLowDay)) {
+                profit = highPrice - lowPrice
+                highDay = temporaryHighDay
+                lowDay = temporaryLowDay
             }
         }
     }
