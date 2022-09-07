@@ -1,11 +1,23 @@
 import kotlin.math.pow
 
-fun main() {
-    println(recursive1(2.0,5.0))
-    println(recursive2(2.0, 12.0))
-    println(2.0.pow(12.0))
-}
+// Assign the base and power of.
+const val x = 1.001
+const val n = 81920.0
 
+fun main() {
+    val rounds = 1000000
+    val time = System.currentTimeMillis()
+
+    for (i in 0..rounds) {
+        // println(x.pow(n))
+        println(recursive2(x, n))
+        // println(recursive1(x, n))
+    }
+
+    val totalTid = System.currentTimeMillis()-time
+
+    println("" + rounds/(totalTid) + " runder per ms")
+}
 
 fun recursive1(x: Double, n: Double): Double {
     return if (n > 0.0) {
