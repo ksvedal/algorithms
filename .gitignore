@@ -8,3 +8,7 @@
 /httpRequests/
 
 /build/
+/build
+**/build
+
+.DS_Store
