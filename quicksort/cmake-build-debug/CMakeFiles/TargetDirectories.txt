@@ -1,0 +1,3 @@
+/Users/kristoffersvedal/Documents/algorithms/quicksort/cmake-build-debug/CMakeFiles/quicksort.dir
+/Users/kristoffersvedal/Documents/algorithms/quicksort/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kristoffersvedal/Documents/algorithms/quicksort/cmake-build-debug/CMakeFiles/rebuild_cache.dir
