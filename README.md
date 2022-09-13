@@ -12,8 +12,8 @@ Find exponent using recursion.
 ```
 
 ```diff
-! improved_quicksort
-Combining quicksort with multiple different sorting algorithms
+! quicksort_comparison
+Comparing single pivot and dual pivot quicksort.
 ```
 
 ```diff
