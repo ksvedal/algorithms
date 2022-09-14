@@ -17,4 +17,8 @@
 .DS_Store
 
 # C++
+cmake-build-debug
+/cmake-build-debug
+/cmake-build-debug/
+**/cmake-build-debug/
 
