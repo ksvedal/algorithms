@@ -1,6 +1,7 @@
+// This code was copied from https://www.geeksforgeeks.org/quick-sort/
+
 #include <algorithm>
 #include "quicksort.h"
-using namespace std;
 
 int partition(int arr[], int low, int high)
 {
@@ -14,9 +15,9 @@ int partition(int arr[], int low, int high)
         while (pivot < arr[j])
             j--;
         if (i < j)
-            swap(arr[i], arr[j]);
+            std::swap(arr[i], arr[j]);
     }
-    swap(arr[low], arr[j]);
+    std::swap(arr[low], arr[j]);
     return j;
 }
 

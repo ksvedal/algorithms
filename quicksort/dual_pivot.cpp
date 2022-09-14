@@ -1,5 +1,6 @@
+// This code is copied from https://www.geeksforgeeks.org/dual-pivot-quicksort/
+
 using namespace std;
-#include "quicksort.h"
 
 int partition(int* arr, int low, int high, int* lp);
 
