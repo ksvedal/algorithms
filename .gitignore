@@ -1,13 +1,13 @@
-# Default ignored files
+##### Default ignored files
 /shelf/
 /.idea/workspace.xml
 /.idea/
 /.idea
 **/.idea
-# Datasource local storage ignored files
+##### Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-# Editor-based HTTP Client requests
+##### Editor-based HTTP Client requests
 /httpRequests/
 
 /build/
@@ -16,9 +16,28 @@
 
 .DS_Store
 
-# C++
+##### C++
 cmake-build-debug
 /cmake-build-debug
 /cmake-build-debug/
 **/cmake-build-debug/
 
+##### GO
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
