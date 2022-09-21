@@ -1,9 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 type node struct {
-	data string
+	data int
 	prev *node
 	next *node
 }
@@ -18,7 +21,7 @@ func initDoublyList() *doublyLinkedList {
 	return &doublyLinkedList{}
 }
 
-func (d *doublyLinkedList) AddFrontNodeDLL(data string) {
+func (d *doublyLinkedList) AddFrontNodeDLL(data int) {
 	newNode := &node{
 		data: data,
 	}
@@ -34,7 +37,7 @@ func (d *doublyLinkedList) AddFrontNodeDLL(data string) {
 	return
 }
 
-func (d *doublyLinkedList) AddEndNodeDLL(data string) {
+func (d *doublyLinkedList) AddEndNodeDLL(data int) {
 	newNode := &node{
 		data: data,
 	}
@@ -53,13 +56,14 @@ func (d *doublyLinkedList) AddEndNodeDLL(data string) {
 	d.len++
 	return
 }
+
 func (d *doublyLinkedList) TraverseForward() error {
 	if d.head == nil {
 		return fmt.Errorf("TraverseError: List is empty")
 	}
 	temp := d.head
 	for temp != nil {
-		fmt.Printf("value = %v, prev = %v, next = %v\n", temp.data, temp.prev, temp.next)
+		fmt.Printf("%v ", temp.data)
 		temp = temp.next
 	}
 	fmt.Println()
@@ -72,7 +76,7 @@ func (d *doublyLinkedList) TraverseReverse() error {
 	}
 	temp := d.tail
 	for temp != nil {
-		fmt.Printf("value = %v, prev = %v, next = %v\n", temp.data, temp.prev, temp.next)
+		fmt.Printf("%v ", temp.data)
 		temp = temp.prev
 	}
 	fmt.Println()
@@ -82,27 +86,157 @@ func (d *doublyLinkedList) TraverseReverse() error {
 func (d *doublyLinkedList) Size() int {
 	return d.len
 }
+
+/**
+Adds two doubly linked lists together by traversing backwards through the nodes.
+*/
+func add(d1 *doublyLinkedList, d2 *doublyLinkedList, d3 *doublyLinkedList) error {
+	if (d1.head == nil) || (d2.head == nil) {
+		return fmt.Errorf("error: One or more list is empty")
+	} else {
+		carry := 0
+		temp := d1.tail
+		temp2 := d2.tail
+		for (temp != nil) || (temp2 != nil) {
+			result := 0
+			if temp == nil {
+				result = 0 + temp2.data + carry
+				temp2 = temp2.prev
+			} else if temp2 == nil {
+				result = temp.data + 0 + carry
+				temp = temp.prev
+			} else {
+				result = temp.data + temp2.data + carry
+				temp = temp.prev
+				temp2 = temp2.prev
+			}
+			carry = 0
+			if result > 9 {
+				result -= 10
+				carry = 1
+			}
+			d3.AddFrontNodeDLL(result)
+		}
+		if (temp == nil) && (temp2 == nil) && carry > 0 {
+			d3.AddFrontNodeDLL(carry)
+		}
+	}
+	return nil
+}
+
+/**
+Subtracts two doubly linked lists together by traversing backwards through the nodes.
+*/
+func subtract(d1 *doublyLinkedList, d2 *doublyLinkedList, d3 *doublyLinkedList) error {
+
+	tempDoublyList := initDoublyList()
+
+	if (d1.head == nil) || (d2.head == nil) {
+		return fmt.Errorf("error: One or more list is empty")
+	} else {
+		carry := 0
+		result := 0
+
+		temp := d1.tail
+		temp2 := d2.tail
+
+		// While there is still elements in the lists:
+		for (temp != nil) || (temp2 != nil) {
+
+			// If list 1 has reached its end:
+			if temp == nil {
+				result = 0 - temp2.data - carry
+				temp2 = temp2.prev
+
+				// If list 2 has reached its end:
+			} else if temp2 == nil {
+				result = temp.data - carry
+				temp = temp.prev
+
+				// If both lists has elements
+			} else {
+				result = temp.data - temp2.data - carry
+				temp = temp.prev
+				temp2 = temp2.prev
+			}
+			if result < 0 {
+				result += 10
+				carry = 1
+			} else {
+				carry = 0
+			}
+			tempDoublyList.AddFrontNodeDLL(result)
+		}
+
+		temp = tempDoublyList.head
+
+		if carry > 0 {
+			for temp != nil {
+				if temp.prev == nil {
+					d3.AddFrontNodeDLL((9 - temp.data) * -1)
+					temp = temp.next
+				} else if temp.next == nil {
+					d3.AddEndNodeDLL(10 - temp.data)
+					temp = temp.next
+				} else {
+					d3.AddEndNodeDLL(9 - temp.data)
+					temp = temp.next
+				}
+			}
+		} else {
+			for temp != nil {
+				d3.AddEndNodeDLL(temp.data)
+				temp = temp.next
+			}
+		}
+	}
+	return nil
+}
+
 func main() {
 	doublyList := initDoublyList()
-	fmt.Printf("Add Front Node: C\n")
-	doublyList.AddFrontNodeDLL("C")
-	fmt.Printf("Add Front Node: B\n")
-	doublyList.AddFrontNodeDLL("B")
-	fmt.Printf("Add Front Node: A\n")
-	doublyList.AddFrontNodeDLL("A")
-	fmt.Printf("Add End Node: D\n")
-	doublyList.AddEndNodeDLL("D")
-	fmt.Printf("Add End Node: E\n")
-	doublyList.AddEndNodeDLL("E")
+	doublyList2 := initDoublyList()
+	doublyListAddResult := initDoublyList()
+	doublyListSubtractResult := initDoublyList()
 
-	fmt.Printf("Size of doubly linked ist: %d\n", doublyList.Size())
+	for i := 0; i < 6; i++ {
+		doublyList.AddEndNodeDLL(rand.Intn(9 - 0))
+	}
 
-	err := doublyList.TraverseForward()
+	for i := 0; i < 10; i++ {
+		doublyList2.AddEndNodeDLL(rand.Intn(9 - 0))
+	}
+
+	err := add(doublyList, doublyList2, doublyListAddResult)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	err = doublyList.TraverseReverse()
+	err = subtract(doublyList, doublyList2, doublyListSubtractResult)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	print("First list:						")
+	err = doublyList.TraverseForward()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	print("Second list:						")
+	err = doublyList2.TraverseForward()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	print("Result after adding them together:			")
+	err = doublyListAddResult.TraverseForward()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	print("Result after subtracting them:				")
+	err = doublyListSubtractResult.TraverseForward()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
