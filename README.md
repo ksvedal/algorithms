@@ -17,8 +17,10 @@ Comparing single pivot and dual pivot quicksort.
 ```
 
 ```diff
-! josephus_problem
-Solving josephus problem.
+! linked_list_addition
+Algorithm where you can add and subtract very large numbers by using doubly linked lists.
+The doubly linked list structure and manipulation were inspired by and borrowed from 
+https://golangbyexample.com/doubly-linked-list-golang/. We implemented the add, subtract methods.
 ```
 
 ```diff
