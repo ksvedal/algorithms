@@ -8,7 +8,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 type node struct {
@@ -205,12 +204,26 @@ func main() {
 	doublyListAddResult := initDoublyList()
 	doublyListSubtractResult := initDoublyList()
 
-	for i := 0; i < 6; i++ {
-		doublyList.AddEndNodeDLL(rand.Intn(9 - 0))
+	// User input for first number.
+	fmt.Printf("Enter size of your first number: ")
+	var size int
+	fmt.Scanln(&size)
+	for i := 0; i < size; i++ {
+		var value int
+		fmt.Printf("Enter %dth element: ", i)
+		fmt.Scanf("%d%*c", &value)
+		doublyList.AddEndNodeDLL(value)
 	}
 
-	for i := 0; i < 10; i++ {
-		doublyList2.AddEndNodeDLL(rand.Intn(9 - 0))
+	// User input for second number.
+	fmt.Printf("Enter size of your second number: ")
+	var size2 int
+	fmt.Scanln(&size2)
+	for i := 0; i < size2; i++ {
+		var value int
+		fmt.Printf("Enter %dth element: ", i)
+		fmt.Scanf("%d%*c", &value)
+		doublyList2.AddEndNodeDLL(value)
 	}
 
 	err := add(doublyList, doublyList2, doublyListAddResult)
