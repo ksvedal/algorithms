@@ -1,3 +1,9 @@
+/**
+The doubly linked list structure and manipulation was inspired by and borrowed
+from https://golangbyexample.com/doubly-linked-list-golang/
+We implemented the add, subtract and main functions.
+*/
+
 package main
 
 import (
