@@ -6,7 +6,7 @@
 // The dual pivot algorithm have been copied from GFG (https://www.geeksforgeeks.org/dual-pivot-quicksort).
 // For this project where I compare it to single pivot.
 
-const int size = 10000000;
+const int size = 1000000;
 int SinglePivotArray[size];
 int DualPivotArray[size];
 
@@ -15,17 +15,17 @@ bool sorted = true;
 
 int main() {
     for (int & i : SinglePivotArray) {
-        i = (rand() % 10000 + 1);
+        i = (rand() % 1000000 + 1);
     }
     std::copy(SinglePivotArray, SinglePivotArray + size, DualPivotArray);
 
     // Print the sum before
-    for (int & i : SinglePivotArray) {
-        sum += i;
+    for (int element : SinglePivotArray) {
+        sum += element;
     }
 
-    singlePivotQuickSort(SinglePivotArray, 0, size - 1);
-    singlePivotQuickSort(DualPivotArray, 0, size - 1);
+    // singlePivotQuickSort(SinglePivotArray, 0, size - 1);
+    // singlePivotQuickSort(DualPivotArray, 0, size - 1);
 
     std::cout << "Sum before sorting with single pivot:     " << sum << std::endl;
 
@@ -64,15 +64,15 @@ int main() {
 
     // Print sum after
     sum = 0;
-    for (int & i : SinglePivotArray) {
-        sum += i;
+    for (int element : SinglePivotArray) {
+        sum += element;
     }
     std::cout << "Sum after sorting with single pivot:      " << sum << std::endl;
 
     // Print the sum before
     sum = 0;
-    for (int & i : DualPivotArray) {
-        sum += i;
+    for (int element : DualPivotArray) {
+        sum += element;
     }
     std::cout << "Sum before sorting with dual pivot:       " << sum << std::endl;
 
@@ -111,8 +111,8 @@ int main() {
 
     // Print the sum after
     sum = 0;
-    for (int & i : DualPivotArray) {
-        sum += i;
+    for (int element : DualPivotArray) {
+        sum += element;
     }
     std::cout << "Sum after sorting with dual pivot:        " << sum << std::endl;
 
