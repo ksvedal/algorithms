@@ -3,12 +3,10 @@
 #include <array>
 #include <chrono>
 
-// Both the dual pivot and single pivot algorithms have been copied over from geeksforgeeks.
-// For a prosject comparing them.
-// These are the links: https://www.geeksforgeeks.org/quick-sort/
-//                      https://www.geeksforgeeks.org/dual-pivot-quicksort/
+// The dual pivot algorithm have been copied from GFG (https://www.geeksforgeeks.org/dual-pivot-quicksort).
+// For this project where I compare it to single pivot.
 
-const int size = 100000000;
+const int size = 10000000;
 int SinglePivotArray[size];
 int DualPivotArray[size];
 
@@ -17,7 +15,7 @@ bool sorted = true;
 
 int main() {
     for (int & i : SinglePivotArray) {
-        i = (rand() % 10 + 1);
+        i = (rand() % 10000 + 1);
     }
     std::copy(SinglePivotArray, SinglePivotArray + size, DualPivotArray);
 
@@ -25,6 +23,10 @@ int main() {
     for (int & i : SinglePivotArray) {
         sum += i;
     }
+
+    singlePivotQuickSort(SinglePivotArray, 0, size - 1);
+    singlePivotQuickSort(DualPivotArray, 0, size - 1);
+
     std::cout << "Sum before sorting with single pivot:     " << sum << std::endl;
 
     for (int i = 0; i < size-2; ++i) {
@@ -39,10 +41,10 @@ int main() {
         std::cout << "SinglePivotArray is sorted." << std::endl;
     } else {
         std::cout << "SinglePivotArray is not sorted." << std::endl;
-    };
+    }
 
     auto start = std::chrono::high_resolution_clock::now();
-    // SinglePivotQuickSort(SinglePivotArray, 0, size - 1);
+    singlePivotQuickSort(SinglePivotArray, 0, size - 1);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> SinglePivotTime = end-start;
 
@@ -58,7 +60,7 @@ int main() {
         std::cout << "SinglePivotArray is sorted." << std::endl;
     } else {
         std::cout << "SinglePivotArray is not sorted." << std::endl;
-    };
+    }
 
     // Print sum after
     sum = 0;
@@ -86,10 +88,10 @@ int main() {
         std::cout << "DualPivotArray is sorted." << std::endl;
     } else {
         std::cout << "DualPivotArray is not sorted." << std::endl;
-    };
+    }
 
     auto start2 = std::chrono::high_resolution_clock::now();
-    DualPivotQuickSort(DualPivotArray, 0, size - 1);
+    dualPivotQuickSort(DualPivotArray, 0, size - 1);
     auto end2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> DualPivotTime = end2-start2;
 
@@ -105,7 +107,7 @@ int main() {
         std::cout << "DualPivotArray is sorted." << std::endl;
     } else {
         std::cout << "DualPivotArray is not sorted." << std::endl;
-    };
+    }
 
     // Print the sum after
     sum = 0;
@@ -121,57 +123,57 @@ int main() {
 }
 
 // Single pivot quicksort
-void SinglePivotQuickSort(int *arr, int low, int high)
-{
-    if (low < high)
-    {
-        int pivot = partition(arr, low, high);
-        SinglePivotQuickSort(arr, low, pivot - 1);
-        SinglePivotQuickSort(arr, pivot + 1, high);
+void singlePivotQuickSort(int *arr, int low, int high) {
+    if (low < high) {
+        if (high - low > 2) {
+            int pivot = partition(arr, low, high);
+            singlePivotQuickSort(arr, low, pivot - 1);
+            singlePivotQuickSort(arr, pivot + 1, high);
+        } else {
+            median3sort(arr, low, high);
+        }
     }
 }
 
 // Single pivot partitioning
-int partition (int arr[], int low, int high)
-{
-    int pivot = arr[high]; // pivot
-    int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
-
-    for (int j = low; j <= high - 1; j++)
-    {
-        // If current element is smaller than the pivot
-        if (arr[j] < pivot)
-        {
-            i++; // increment index of smaller element
-            swap(&arr[i], &arr[j]);
-        }
+int partition (int *arr, int low, int high) {
+    int ilow, ihigh;
+    int middle = median3sort(arr, low, high);
+    int dlow = arr[middle];
+    swap(&arr[middle], &arr[high-1]);
+    for (ilow = low, ihigh = high - 1;;) {
+        while (arr[++ilow] < dlow);
+        while (arr[--ihigh] > dlow);
+        if (ilow >= ihigh) break;
+        swap(&arr[ilow], &arr[ihigh]);
     }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
+    swap(&arr[ilow], &arr[high-1]);
+    return ilow;
 }
 
 // Dual pivot quicksort
-void DualPivotQuickSort(int* arr, int low, int high)
-{
+void dualPivotQuickSort(int* arr, int low, int high) {
+    swap(&arr[low], &arr[low+(high-low)/3]);
+    swap(&arr[high], &arr[high-(high-low)/3]);
     if (low < high) {
         // lp means left pivot, and rp means right pivot.
         int lp, rp;
+
         rp = partition(arr, low, high, &lp);
-        DualPivotQuickSort(arr, low, lp - 1);
-        DualPivotQuickSort(arr, lp + 1, rp - 1);
-        DualPivotQuickSort(arr, rp + 1, high);
+        dualPivotQuickSort(arr, low, lp - 1);
+        dualPivotQuickSort(arr, lp + 1, rp - 1);
+        dualPivotQuickSort(arr, rp + 1, high);
     }
 }
 
 // Dual pivot partition
-int partition(int* arr, int low, int high, int* lp)
-{
-    if (arr[low] > arr[high])
-        swap(&arr[low], &arr[high]);
+int partition(int* arr, int low, int high, int* lp) {
+    if (arr[low] > arr[high]) swap(&arr[low], &arr[high]);
 
     // p is the left pivot, and q is the right pivot.
     int j = low + 1;
     int g = high - 1, k = low + 1, p = arr[low], q = arr[high];
+
     while (k <= g) {
 
         // if elements are less than the left pivot
@@ -208,9 +210,18 @@ int partition(int* arr, int low, int high, int* lp)
     return g;
 }
 
+int median3sort(int *arr, int low, int high) {
+    int middle = (low + high) / 2;
+    if (arr[low] > arr[middle]) swap(&arr[low], &arr[middle]);
+    if (arr[middle] > arr[high]) {
+        swap(&arr[middle], &arr[high]);
+        if (arr[low] > arr[middle]) swap(&arr[low], &arr[middle]);
+    }
+    return middle;
+}
+
 // Swap
-void swap(int* a, int* b)
-{
+void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
