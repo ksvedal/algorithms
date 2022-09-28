@@ -1,29 +1,21 @@
 # algorithms
 Collection of different algorithms from the Algorithms and Datastructures class.
+(each made in various different languages!)
 
-```diff
-simple_stocktrader
+## 🟣 simple_stocktrader
+#### Kotlin
 Stock trader app finds the best day to buy and sell on historic ticker.
-```
 
-```diff
-exponent_calculator
+## 🟣 exponent_calculator
+#### Kotlin
 Find exponent using recursion.
-```
 
-```diff
-quicksort_comparison
+## 🟡 quicksort_comparison
+#### C++
 Comparing single pivot and dual pivot quicksort.
-```
 
-```diff
-linked_list_addition
+## 🔵 linked_list_addition
+#### Go
 Algorithm where you can add and subtract very large numbers by using doubly linked lists.
 The doubly linked list structure and manipulation were inspired by and borrowed from 
 https://golangbyexample.com/doubly-linked-list-golang/. We implemented the add, subtract methods.
-```
-
-```diff
-parenthesis_checker
-Checks if parenthesis' in file closes and are sorted properly.
-```
