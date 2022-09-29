@@ -1,6 +1,6 @@
 # algorithms
 Collection of different algorithms from the Algorithms and Datastructures class.
-(each made in various different languages!)
+(each made by testing out different languages!)
 
 ## 🟣 simple_stocktrader
 #### Kotlin
