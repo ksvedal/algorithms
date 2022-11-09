@@ -41,6 +41,8 @@ public class LempelZiv {
                         }
 
                     }
+
+                    // Tags the current bytes as in the dictionary and adds foundLengthByte and distanceBuffer.
                     if (foundLengthInt > foundLengthByte && foundLengthInt > minimumLength) {
                         foundInDictionary = true;
                         foundLengthByte = (byte)foundLengthInt;
@@ -60,16 +62,15 @@ public class LempelZiv {
                     unchanged = 0;
                 }
 
-                // Adds the negative signed byte value signaling that it has been compressed.
+                // Adds the negative signed byte value signaling that it has been compressed and is in dictionary.
                 compressed.add((byte)(-foundLengthByte));
 
-                // Divides the distance short into two bytes and adds one byte at a time.
+                // Divides the distance short into two bytes and adds one byte to the compressed ArrayList at a time.
                 compressed.add((byte)(distanceBuffer & 0xff));        // First half
                 compressed.add((byte)((distanceBuffer >> 8) & 0xff)); // Second half
 
                 i += ((int)(foundLengthByte) - 1);
-            }
-            else {
+            } else {
                 unchanged++;
             }
 
@@ -117,8 +118,10 @@ public class LempelZiv {
 
             // If the byte is negative signals that the next two bytes have been compressed.
             if (x < 0) {
+
                 // Combines the next two bytes into a short.
                 short distance = (short)((data[totalIndex + 1] & 0xff) | ((data[totalIndex + 2] & 0xff) << 8));
+
                 // Starts at the start
                 int start = currentIndex;
 
