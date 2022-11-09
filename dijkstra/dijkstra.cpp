@@ -110,7 +110,7 @@ Graph importGraph(const std::string& name) {
 int main()
 {
     try {
-        auto graph = importGraph("/Users/kristoffersvedal/Documents/algorithms/dijkstra/vg1");
+        auto graph = importGraph("vg1");
         graph.dijkstra(1);
     } catch (int) {
         std::cout << "Could not read file." << std::endl;
