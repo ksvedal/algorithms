@@ -22,9 +22,10 @@ public class LempelZiv {
             boolean foundInDictionary = false;
             short distanceBuffer = 0;
             byte foundLengthByte = 0;
+            short temporaryDistance = 3;
 
             // Loops until the max value of the Short datatype (32 767)
-            for (short temporaryDistance = 3; temporaryDistance <= i && temporaryDistance < Short.MAX_VALUE; temporaryDistance++) {
+            while (temporaryDistance <= i && temporaryDistance < Short.MAX_VALUE) {
 
                 // Checks if byte in current index of bytearray is found in dictionary
                 if (fileAsBytes[i - temporaryDistance] == fileAsBytes[i]) {
@@ -52,6 +53,7 @@ public class LempelZiv {
                         }
                     }
                 }
+                temporaryDistance++;
             }
             if (foundInDictionary) {
                 if (unchanged != 0) {
@@ -103,46 +105,52 @@ public class LempelZiv {
         DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(from)));
         DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(to)));
 
-        byte[] data = inputStream.readAllBytes();
+        byte[] fileAsBytes = inputStream.readAllBytes();
 
         ArrayList<Byte> decompressed = new ArrayList<>();
 
         int currentIndex = 0;
         int totalIndex = 0;
+        short distance;
 
         // Iterates over all the data bytes.
-        for (totalIndex = 0; totalIndex < data.length; totalIndex++) {
+        while (totalIndex < fileAsBytes.length) {
 
             // x = byte in index
-            byte x = data[totalIndex];
+            byte currentByte = fileAsBytes[totalIndex];
 
-            // If the byte is negative signals that the next two bytes have been compressed.
-            if (x < 0) {
+            // If the byte is positive (a repeated sequence) just adds the byte.
+            if (currentByte >= 0) {
+                int j = totalIndex + 1;
+                while (j <= totalIndex + currentByte && j < fileAsBytes.length) {
+                    decompressed.add(fileAsBytes[j]);
+                    currentIndex++;
+                    j++;
+                }
+                totalIndex += currentByte;
+            }
 
+            // Otherwise, if the byte is negative, signals that the next two bytes have been compressed.
+            // currentByte then acts as a pointer to that part of the dictionary.
+            else {
                 // Combines the next two bytes into a short.
-                short distance = (short)((data[totalIndex + 1] & 0xff) | ((data[totalIndex + 2] & 0xff) << 8));
+                distance = (short)((fileAsBytes[totalIndex + 1] & 0xff) | ((fileAsBytes[totalIndex + 2] & 0xff) << 8));
 
                 // Starts at the start
                 int start = currentIndex;
+                int j = currentIndex - distance;
 
                 // Adds the bytes from the dictionary (j) to the decompressed ArrayList.
-                for (int j = start - distance; j < start - distance - x; j++) {
+                while (j < start - distance - currentByte) {
                     decompressed.add(decompressed.get(j));
                     currentIndex++;
+                    j++;
                 }
 
                 // Adds the size of the byte section to index for the next iteration.
                 totalIndex += (minimumLength - 1);
             }
-
-            // If the byte is positive (a repeated sequence) just adds the byte.
-            else {
-                for (int j = totalIndex + 1; j <= totalIndex + x && j < data.length; j++) {
-                    decompressed.add(data[j]);
-                    currentIndex++;
-                }
-                totalIndex += x;
-            }
+            totalIndex++;
         }
 
         // Writes the decompressed bytes to file.
