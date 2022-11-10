@@ -15,10 +15,10 @@ public class LempelZiv {
 
         ArrayList<Byte> compressed = new ArrayList<>();
         byte unchanged = minimumLength;
-        int i;
+        int i = minimumLength;
 
-        // Loops until end of the byte Array
-        for (i = minimumLength; i < fileAsBytes.length; i++) {
+        // Until end of the byte Array
+        while (i < fileAsBytes.length) {
             boolean foundInDictionary = false;
             short distanceBuffer = 0;
             byte foundLengthByte = 0;
@@ -67,9 +67,11 @@ public class LempelZiv {
                 // Adds the negative signed byte value signaling that it has been compressed and is in dictionary.
                 compressed.add((byte)(-foundLengthByte));
 
-                // Divides the distance short into two bytes and adds one byte to the compressed ArrayList at a time.
+                // Divides the distance short into four bytes and adds one byte to the compressed ArrayList at a time.
                 compressed.add((byte)(distanceBuffer & 0xff));        // First half
                 compressed.add((byte)((distanceBuffer >> 8) & 0xff)); // Second half
+                // compressed.add((byte)((distanceBuffer >> 16) & 0xff));
+                // compressed.add((byte)((distanceBuffer >> 24) & 0xff));
 
                 i += ((int)(foundLengthByte) - 1);
             } else {
@@ -84,6 +86,7 @@ public class LempelZiv {
                 }
                 unchanged = 0;
             }
+            i++;
         }
 
         // Add the unchanged byte buffer to the end of the compressed file (if there is any left).
@@ -111,7 +114,7 @@ public class LempelZiv {
 
         int currentIndex = 0;
         int totalIndex = 0;
-        short distance;
+        int distance;
 
         // Iterates over all the data bytes.
         while (totalIndex < fileAsBytes.length) {
@@ -134,8 +137,10 @@ public class LempelZiv {
             // currentByte then acts as a pointer to that part of the dictionary.
             else {
                 // Combines the next two bytes into a short.
-                distance = (short)((fileAsBytes[totalIndex + 1] & 0xff) | ((fileAsBytes[totalIndex + 2] & 0xff) << 8));
 
+                // distance = (int)((fileAsBytes[totalIndex + 1] & 0xff) | ((fileAsBytes[totalIndex + 2] & 0xff) << 8) | ((fileAsBytes[totalIndex + 3] & 0xff) << 16) | ((fileAsBytes[totalIndex + 4] & 0xff) << 24));
+
+                distance = (short)((fileAsBytes[totalIndex + 1] & 0xff) | ((fileAsBytes[totalIndex + 2] & 0xff) << 8));
                 // Starts at the start
                 int start = currentIndex;
                 int j = currentIndex - distance;
